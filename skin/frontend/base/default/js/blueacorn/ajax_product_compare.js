@@ -8,7 +8,6 @@ AjaxCompare.prototype = {
         this.successTemplate = new Template(
             '<ul class="messages"><li class="success-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
         );
-
         this.setupObservers();
     },
     setupObservers: function(){
@@ -16,9 +15,17 @@ AjaxCompare.prototype = {
         $$('.link-compare').invoke('observe', 'click', function(){
           self.addToCompare(this);
         });
-
+        $$('.btn-remove').each(function(element){
+            element.writeAttribute('onClick', false);
+        })
         $$('.btn-remove').invoke('observe', 'click', function(){
             self.removeItem(this);
+        });
+        $$('.actions a').invoke('observe', 'click', function(){
+            self.clearAll(this);
+        });
+        $$('.actions a').each( function(element){
+            element.writeAttribute('onClick', false);
         });
     },
     addToCompare: function(element) {
@@ -30,7 +37,7 @@ AjaxCompare.prototype = {
                 var successMessage = {
                     message: response.success
                 }
-
+                self.removeMessage();
                 self.addSuccessMessage(successMessage);
                 self.updateComparedBlock(response.compared_html);
 
@@ -39,18 +46,35 @@ AjaxCompare.prototype = {
                 } else {
                     self.insertCompareBlock(response.compare_html);
                 }
+                self.setupObservers();
             }
         });
     },
     removeItem: function(element){
         var self = this;
         Event.stop(event);
+        this.removeMessage;
         new Ajax.Request(element.href, {
             onComplete: function (request) {
-
+                var response = JSON.parse(request.responseText);
+                var successMessage = {
+                    message: response.success
+                }
+                self.removeMessage();
+                self.updateCompareBlock(response.compare_html);
+                self.addSuccessMessage(successMessage);
+                if($$('.block-compared').length){
+                    self.updateComparedBlock(response.compared_html);
+                } else {
+                    self.insertComparedBlock(response.compared_html);
+                }
+                self.setupObservers();
             }
         });
-        console.log(element);
+    },
+    clearAll: function(element){
+        Event.stop(event);
+        console.log("WHAT!!");
     },
     addSuccessMessage: function(successMessage){
         var self = this;
@@ -72,9 +96,19 @@ AjaxCompare.prototype = {
             d.update(html);
         });
     },
+    insertComparedBlock: function(html){
+        $$('.col-right').each(function(d){
+            d.insert({
+                top: html
+            });
+        })
+    },
     updateComparedBlock: function(html){
         $$('.block-compared').each(function (d) {
             d.update(html);
         });
+    },
+    removeMessage: function(){
+        $$('.messages').invoke('remove');
     }
 }

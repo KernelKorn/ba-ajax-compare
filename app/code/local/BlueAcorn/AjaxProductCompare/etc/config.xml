@@ -13,20 +13,6 @@
             </updates>
         </layout>
         <routers>
-            <!--<tag>-->
-                <!--<args>-->
-                    <!--<modules>-->
-                        <!--<inchoo_tag before="Mage_Tag">Inchoo_Tag</inchoo_tag>-->
-                    <!--</modules>-->
-                <!--</args>-->
-            <!--</tag>-->
-            <!--<blueacorn_compare>-->
-                <!--<use>standard</use>-->
-                <!--<args>-->
-                    <!--<module>BlueAcorn_AjaxProductCompare</module>-->
-                    <!--<frontName>bacompare</frontName>-->
-                <!--</args>-->
-            <!--</blueacorn_compare>-->
             <catalog>
                 <use>standard</use>
                 <args>

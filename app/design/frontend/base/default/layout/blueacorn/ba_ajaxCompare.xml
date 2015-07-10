@@ -5,9 +5,6 @@
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>js/blueacorn/ajax_product_compare.js</name></action>
         </reference>
-        <reference name="catalog.compare.sidebar">
-            <block type="catalog/product_compare_sidebar" before="cart_sidebar" name="catalog.compare.sidebar" template="ba_ajaxCompare/sidebar.phtml"/>
-        </reference>
     </default>
 </layout>
 
