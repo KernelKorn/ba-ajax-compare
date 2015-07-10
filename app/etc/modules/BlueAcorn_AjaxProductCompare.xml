@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <BlueAcorn_AjaxProductCompare>
+            <active>true</active>
+            <codePool>local</codePool>
+        </BlueAcorn_AjaxProductCompare>
+    </modules>
+</config>
