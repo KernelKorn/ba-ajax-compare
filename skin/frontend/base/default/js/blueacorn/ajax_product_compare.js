@@ -12,8 +12,9 @@ AjaxCompare.prototype = {
     },
     setupObservers: function(){
         var self = this;
+
         $$('.link-compare').invoke('observe', 'click', function(){
-          self.addToCompare(this);
+            self.addToCompare(this);
         });
         $$('.btn-remove').each(function(element){
             element.writeAttribute('onClick', false);
@@ -21,48 +22,66 @@ AjaxCompare.prototype = {
         $$('.btn-remove').invoke('observe', 'click', function(){
             self.removeItem(this);
         });
-        $$('.actions a').invoke('observe', 'click', function(){
+        $$('.sidebar .actions a').invoke('observe', 'click', function(){
             self.clearAll(this);
         });
-        $$('.actions a').each( function(element){
+        $$('.sidebar .actions a').each( function(element){
+            element.writeAttribute('onClick', false);
+        });
+        $$('.sidebar .actions .button').invoke('observe', 'click', function(){
+            self.compareBox(this);
+        });
+        $$('.sidebar .actions .button').each( function(element){
             element.writeAttribute('onClick', false);
         });
     },
+    stopObservers:function(){
+        $$('.link-compare').each(function(element){
+            element.stopObserving('click');
+        })
+    },
     addToCompare: function(element) {
         var self = this
+        var url = element.href
+
         Event.stop(event);
-        new Ajax.Request(element.href, {
+        this.stopObservers();
+        element.writeAttribute('href', false);
+
+        new Ajax.Request(url, {
             onComplete: function(request){
                 var response = JSON.parse(request.responseText);
-                var successMessage = {
-                    message: response.success
+                var message = {
+                    message: response.message
                 }
+
                 self.removeMessage();
-                self.addSuccessMessage(successMessage);
+                self.addMessage(message);
                 self.updateComparedBlock(response.compared_html);
 
                 if($$('.block-compare').length){
                     self.updateCompareBlock(response.compare_html);
+                    self.setupObservers();
                 } else {
                     self.insertCompareBlock(response.compare_html);
+                    self.setupObservers();
                 }
-                self.setupObservers();
+                element.writeAttribute('href', url);
             }
         });
     },
     removeItem: function(element){
         var self = this;
         Event.stop(event);
-        this.removeMessage;
         new Ajax.Request(element.href, {
             onComplete: function (request) {
                 var response = JSON.parse(request.responseText);
-                var successMessage = {
-                    message: response.success
+                var message = {
+                    message: response.message
                 }
                 self.removeMessage();
                 self.updateCompareBlock(response.compare_html);
-                self.addSuccessMessage(successMessage);
+                self.addMessage(message);
                 if($$('.block-compared').length){
                     self.updateComparedBlock(response.compared_html);
                 } else {
@@ -73,14 +92,54 @@ AjaxCompare.prototype = {
         });
     },
     clearAll: function(element){
+        var self = this;
         Event.stop(event);
-        console.log("WHAT!!");
+        this.removeMessage;
+        new Ajax.Request(element.href,{
+            onSuccess: function (request) {
+                var response = JSON.parse(request.responseText);
+                var message = {
+                    message: response.message
+                }
+                self.removeMessage();
+                self.updateCompareBlock(response.compare_html);
+                self.addMessage(message);
+
+                if($$('.block-compared').length){
+                    self.updateComparedBlock(response.compared_html);
+                } else {
+                    self.insertComparedBlock(response.compared_html);
+                }
+            },
+            onException: function (request){
+                var response = JSON.parse(request.responseText);
+                var message = {
+                    message: response.message
+                }
+                self.removeMessage();
+                self.addMessage(message);
+            }
+        })
     },
-    addSuccessMessage: function(successMessage){
+    compareBox: function(element){
+        var self = this;
+        $j.fancybox({
+            width: 820,
+            height: 800,
+            autoSize: false,
+            href: '/catalog/product_compare/index/"',
+            type: 'ajax',
+            afterShow: function() {
+                $j('.buttons-set').hide();
+                $j('.compare-table .btn-remove').hide();
+            }
+        });
+    },
+    addMessage: function(message){
         var self = this;
         $$('.col-main').each(function(d) {
             d.insert({
-                top: self.successTemplate.evaluate(successMessage)
+                top: self.successTemplate.evaluate(message)
             });
         });
     },

@@ -1,0 +1,21 @@
+<adminhtml>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ajaxproductcompare>
+                                        <title>Blue Acorn Core Tab Settings</title>
+                                    </ajaxproductcompare>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</adminhtml>

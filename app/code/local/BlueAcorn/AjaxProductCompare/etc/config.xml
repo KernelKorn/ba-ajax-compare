@@ -4,12 +4,19 @@
             <version>0.1.0</version>
         </BlueAcorn_AjaxProductCompare>
     </modules>
+    <global>
+        <helpers>
+            <ba_ajaxproductcompare>
+                <class>BlueAcorn_AjaxProductCompare_Helper</class>
+            </ba_ajaxproductcompare>
+        </helpers>
+    </global>
     <frontend>
         <layout>
             <updates>
-                <ba_ajaxCompare>
+                <ba_ajaxproductcompare>
                     <file>blueacorn/ba_ajaxCompare.xml</file>
-                </ba_ajaxCompare>
+                </ba_ajaxproductcompare>
             </updates>
         </layout>
         <routers>
@@ -17,7 +24,7 @@
                 <use>standard</use>
                 <args>
                     <modules>
-                        <ba_compare before="Mage_Catalog">BlueAcorn_AjaxProductCompare</ba_compare>
+                        <ba_ajaxproductcompare before="Mage_Catalog">BlueAcorn_AjaxProductCompare</ba_ajaxproductcompare>
                     </modules>
                 </args>
             </catalog>
