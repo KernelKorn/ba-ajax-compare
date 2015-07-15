@@ -1,3 +1,9 @@
+/**
+ * @package     BlueAcorn\AjaxProductCompare
+ * @version     0.1.0
+ * @author      Blue Acorn, Inc. <code@blueacorn.com>
+ * @copyright   Copyright © 2015 Blue Acorn, Inc.
+ */
 document.observe("dom:loaded", function() {
     var ajaxCompare = new AjaxCompare();
 });
@@ -18,7 +24,7 @@ AjaxCompare.prototype = {
         });
         $$('.btn-remove').each(function(element){
             element.writeAttribute('onClick', false);
-        })
+        });
         $$('.btn-remove').invoke('observe', 'click', function(){
             self.removeItem(this);
         });
@@ -35,94 +41,83 @@ AjaxCompare.prototype = {
             element.writeAttribute('onClick', false);
         });
     },
-    stopObservers:function(){
-        $$('.link-compare').each(function(element){
-            element.stopObserving('click');
-        })
-    },
     addToCompare: function(element) {
-        var self = this
-        var url = element.href
+        var self = this;
+        var url = element.href;
 
         Event.stop(event);
-        this.stopObservers();
         element.writeAttribute('href', false);
-
         new Ajax.Request(url, {
             onComplete: function(request){
                 var response = JSON.parse(request.responseText);
                 var message = {
                     message: response.message
+                };
+                if($$('.block-compare').length){
+                    self.updateCompareBlock(response.compare_html);
+                } else {
+                    self.insertCompareBlock(response.compare_html);
                 }
-
                 self.removeMessage();
                 self.addMessage(message);
                 self.updateComparedBlock(response.compared_html);
-
-                if($$('.block-compare').length){
-                    self.updateCompareBlock(response.compare_html);
-                    self.setupObservers();
-                } else {
-                    self.insertCompareBlock(response.compare_html);
-                    self.setupObservers();
-                }
+                self.setupObservers();
                 element.writeAttribute('href', url);
             }
         });
     },
     removeItem: function(element){
         var self = this;
+
         Event.stop(event);
         new Ajax.Request(element.href, {
             onComplete: function (request) {
                 var response = JSON.parse(request.responseText);
                 var message = {
                     message: response.message
-                }
-                self.removeMessage();
-                self.updateCompareBlock(response.compare_html);
-                self.addMessage(message);
+                };
                 if($$('.block-compared').length){
                     self.updateComparedBlock(response.compared_html);
                 } else {
                     self.insertComparedBlock(response.compared_html);
                 }
                 self.setupObservers();
+                self.removeMessage();
+                self.updateCompareBlock(response.compare_html);
+                self.addMessage(message);
             }
         });
     },
     clearAll: function(element){
         var self = this;
+
         Event.stop(event);
-        this.removeMessage;
         new Ajax.Request(element.href,{
             onSuccess: function (request) {
                 var response = JSON.parse(request.responseText);
                 var message = {
                     message: response.message
-                }
-                self.removeMessage();
-                self.updateCompareBlock(response.compare_html);
-                self.addMessage(message);
-
+                };
                 if($$('.block-compared').length){
                     self.updateComparedBlock(response.compared_html);
                 } else {
                     self.insertComparedBlock(response.compared_html);
                 }
+                self.removeMessage();
+                self.updateCompareBlock(response.compare_html);
+                self.addMessage(message);
             },
             onException: function (request){
                 var response = JSON.parse(request.responseText);
                 var message = {
                     message: response.message
-                }
+                };
                 self.removeMessage();
                 self.addMessage(message);
             }
         })
     },
-    compareBox: function(element){
-        var self = this;
+    compareBox: function(){
         $j.fancybox({
             width: 820,
             height: 800,
@@ -170,4 +165,4 @@ AjaxCompare.prototype = {
     removeMessage: function(){
         $$('.messages').invoke('remove');
     }
-}
+};
