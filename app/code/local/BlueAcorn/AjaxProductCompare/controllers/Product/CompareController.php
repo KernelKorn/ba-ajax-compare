@@ -113,10 +113,10 @@ class BlueAcorn_AjaxProductCompare_Product_CompareController extends Mage_Catalo
 
     protected function setResponse($message){
         $compareHtml = Mage::app()->getLayout()->createBlock('catalog/product_compare_sidebar')->setTemplate('catalog/product/compare/sidebar.phtml')->toHtml();
-        $comparedHtml = Mage::app()->getLayout()->createBlock('reports/product_compared')->setTemplate('reports/product_compared.phtml')->toHtml();
+        $recentlyComparedHtml = Mage::app()->getLayout()->createBlock('reports/product_compared')->setTemplate('reports/product_compared.phtml')->toHtml();
         $response = new Varien_Object();
         $response->setCompareHtml($compareHtml);
-        $response->setComparedHtml($comparedHtml);
+        $response->setRecentlyComparedHtml($recentlyComparedHtml);
         $response->setMessage($message);
         Mage::app()->getResponse()->setBody($response->toJson());
     }

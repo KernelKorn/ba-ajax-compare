@@ -18,7 +18,6 @@ AjaxCompare.prototype = {
     },
     setupObservers: function(){
         var self = this;
-
         $$('.link-compare').invoke('observe', 'click', function(){
             self.addToCompare(this);
         });
@@ -27,6 +26,7 @@ AjaxCompare.prototype = {
         });
         $$('.btn-remove').invoke('observe', 'click', function(){
             self.removeItem(this);
+            console.log("clicked");
         });
         $$('.sidebar .actions a').invoke('observe', 'click', function(){
             self.clearAll(this);
@@ -60,7 +60,7 @@ AjaxCompare.prototype = {
                 }
                 self.removeMessage();
                 self.addMessage(message);
-                self.updateComparedBlock(response.compared_html);
+                self.updateRecentlyComparedBlock(response.recently_compared_html);
                 self.setupObservers();
                 element.writeAttribute('href', url);
             }
@@ -77,9 +77,9 @@ AjaxCompare.prototype = {
                     message: response.message
                 };
                 if($$('.block-compared').length){
-                    self.updateComparedBlock(response.compared_html);
+                    self.updateRecentlyComparedBlock(response.recently_compared_html);
                 } else {
-                    self.insertComparedBlock(response.compared_html);
+                    self.insertRecentlyComparedBlock(response.recently_compared_html);
                 }
                 self.setupObservers();
                 self.removeMessage();
@@ -99,9 +99,9 @@ AjaxCompare.prototype = {
                     message: response.message
                 };
                 if($$('.block-compared').length){
-                    self.updateComparedBlock(response.compared_html);
+                    self.updateRecentlyComparedBlock(response.recently_compared_html);
                 } else {
-                    self.insertComparedBlock(response.compared_html);
+                    self.insertRecentlyComparedBlock(response.recently_compared_html);
                 }
                 self.removeMessage();
                 self.updateCompareBlock(response.compare_html);
@@ -118,6 +118,7 @@ AjaxCompare.prototype = {
         })
     },
     compareBox: function(){
+        var self = this;
         $j.fancybox({
             width: 820,
             height: 800,
@@ -126,7 +127,8 @@ AjaxCompare.prototype = {
             type: 'ajax',
             afterShow: function() {
                 $j('.buttons-set').hide();
-                $j('.compare-table .btn-remove').hide();
+                //$j('.compare-table .btn-remove').hide();
+                self.setupObservers;
             }
         });
     },
@@ -150,14 +152,14 @@ AjaxCompare.prototype = {
             d.update(html);
         });
     },
-    insertComparedBlock: function(html){
+    insertRecentlyComparedBlock: function(html){
         $$('.col-right').each(function(d){
             d.insert({
                 top: html
             });
         })
     },
-    updateComparedBlock: function(html){
+    updateRecentlyComparedBlock: function(html){
         $$('.block-compared').each(function (d) {
             d.update(html);
         });
