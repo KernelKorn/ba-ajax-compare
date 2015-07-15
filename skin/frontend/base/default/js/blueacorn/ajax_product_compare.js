@@ -18,107 +18,70 @@ AjaxCompare.prototype = {
     },
     setupObservers: function(){
         var self = this;
+
         $$('.link-compare').invoke('observe', 'click', function(){
-            self.addToCompare(this);
+            self.ajaxRequest(this);
         });
+
         $$('.btn-remove').each(function(element){
             element.writeAttribute('onClick', false);
         });
+
         $$('.btn-remove').invoke('observe', 'click', function(){
-            self.removeItem(this);
-            console.log("clicked");
+            self.ajaxRequest(this);
         });
+
         $$('.sidebar .actions a').invoke('observe', 'click', function(){
-            self.clearAll(this);
+            self.ajaxRequest(this);
         });
+
         $$('.sidebar .actions a').each( function(element){
             element.writeAttribute('onClick', false);
         });
+
         $$('.sidebar .actions .button').invoke('observe', 'click', function(){
             self.compareBox(this);
         });
+
         $$('.sidebar .actions .button').each( function(element){
             element.writeAttribute('onClick', false);
         });
+
     },
-    addToCompare: function(element) {
+    ajaxRequest: function(element) {
         var self = this;
         var url = element.href;
-
+        
         Event.stop(event);
         element.writeAttribute('href', false);
+
         new Ajax.Request(url, {
             onComplete: function(request){
                 var response = JSON.parse(request.responseText);
                 var message = {
                     message: response.message
                 };
+
                 if($$('.block-compare').length){
                     self.updateCompareBlock(response.compare_html);
                 } else {
                     self.insertCompareBlock(response.compare_html);
                 }
+
+                if($$('.block-compared').length){
+                    self.updateRecentlyComparedBlock(response.recently_compared_html);
+                } else {
+                    self.insertRecentlyComparedBlock(response.recently_compared_html);
+                }
+
                 self.removeMessage();
                 self.addMessage(message);
-                self.updateRecentlyComparedBlock(response.recently_compared_html);
                 self.setupObservers();
                 element.writeAttribute('href', url);
             }
         });
     },
-    removeItem: function(element){
-        var self = this;
-
-        Event.stop(event);
-        new Ajax.Request(element.href, {
-            onComplete: function (request) {
-                var response = JSON.parse(request.responseText);
-                var message = {
-                    message: response.message
-                };
-                if($$('.block-compared').length){
-                    self.updateRecentlyComparedBlock(response.recently_compared_html);
-                } else {
-                    self.insertRecentlyComparedBlock(response.recently_compared_html);
-                }
-                self.setupObservers();
-                self.removeMessage();
-                self.updateCompareBlock(response.compare_html);
-                self.addMessage(message);
-            }
-        });
-    },
-    clearAll: function(element){
-        var self = this;
-
-        Event.stop(event);
-        new Ajax.Request(element.href,{
-            onSuccess: function (request) {
-                var response = JSON.parse(request.responseText);
-                var message = {
-                    message: response.message
-                };
-                if($$('.block-compared').length){
-                    self.updateRecentlyComparedBlock(response.recently_compared_html);
-                } else {
-                    self.insertRecentlyComparedBlock(response.recently_compared_html);
-                }
-                self.removeMessage();
-                self.updateCompareBlock(response.compare_html);
-                self.addMessage(message);
-            },
-            onException: function (request){
-                var response = JSON.parse(request.responseText);
-                var message = {
-                    message: response.message
-                };
-                self.removeMessage();
-                self.addMessage(message);
-            }
-        })
-    },
     compareBox: function(){
-        var self = this;
         $j.fancybox({
             width: 820,
             height: 800,
@@ -127,8 +90,6 @@ AjaxCompare.prototype = {
             type: 'ajax',
             afterShow: function() {
                 $j('.buttons-set').hide();
-                //$j('.compare-table .btn-remove').hide();
-                self.setupObservers;
             }
         });
     },
