@@ -11,47 +11,41 @@ document.observe("dom:loaded", function() {
 var AjaxCompare = Class.create();
 AjaxCompare.prototype = {
     initialize: function(){
+        this.removeBtn = '.sidebar .btn-remove';
+        this.compareBtn = '.sidebar .actions .button';
+        this.compareLink = '.link-compare';
+        this.clearAllLink = '.sidebar .actions a';
+        this.compareBlock = '.block-compare';
+        this.colRightBlock = '.col-right';
+        this.recentlyComparedBlock = '.block-compared';
+
         this.successTemplate = new Template(
             '<ul class="messages"><li class="success-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
         );
+
+        this.removeOnClickEvents();
         this.setupObservers();
     },
     setupObservers: function(){
         var self = this;
 
-        $$('.link-compare').invoke('observe', 'click', function(){
+        $$(self.compareLink, self.removeBtn, self.clearAllLink).invoke('observe', 'click', function(){
             self.ajaxRequest(this);
         });
 
-        $$('.btn-remove').each(function(element){
-            element.writeAttribute('onClick', false);
-        });
-
-        $$('.btn-remove').invoke('observe', 'click', function(){
-            self.ajaxRequest(this);
-        });
-
-        $$('.sidebar .actions a').invoke('observe', 'click', function(){
-            self.ajaxRequest(this);
-        });
-
-        $$('.sidebar .actions a').each( function(element){
-            element.writeAttribute('onClick', false);
-        });
-
-        $$('.sidebar .actions .button').invoke('observe', 'click', function(){
+        $$(self.compareBtn).invoke('observe', 'click', function(){
             self.compareBox(this);
         });
-
-        $$('.sidebar .actions .button').each( function(element){
+    },
+    removeOnClickEvents: function() {
+        $$(this.removeBtn, this.clearAllLink, this.compareBtn).each(function(element){
             element.writeAttribute('onClick', false);
         });
-
     },
     ajaxRequest: function(element) {
         var self = this;
         var url = element.href;
-        
+
         Event.stop(event);
         element.writeAttribute('href', false);
 
@@ -62,13 +56,13 @@ AjaxCompare.prototype = {
                     message: response.message
                 };
 
-                if($$('.block-compare').length){
+                if($$(self.compareBlock).length){
                     self.updateCompareBlock(response.compare_html);
                 } else {
                     self.insertCompareBlock(response.compare_html);
                 }
 
-                if($$('.block-compared').length){
+                if($$(self.recentlyComparedBlock).length){
                     self.updateRecentlyComparedBlock(response.recently_compared_html);
                 } else {
                     self.insertRecentlyComparedBlock(response.recently_compared_html);
@@ -77,6 +71,7 @@ AjaxCompare.prototype = {
                 self.removeMessage();
                 self.addMessage(message);
                 self.setupObservers();
+                self.removeOnClickEvents();
                 element.writeAttribute('href', url);
             }
         });
@@ -102,26 +97,26 @@ AjaxCompare.prototype = {
         });
     },
     insertCompareBlock: function(html){
-        $$('.col-right').each(function(d){
+        $$(this.colRightBlock).each(function(d){
             d.insert({
                 top: html
             });
         })
     },
     updateCompareBlock: function(html){
-        $$('.block-compare').each(function (d) {
+        $$(this.compareBlock).each(function (d) {
             d.update(html);
         });
     },
     insertRecentlyComparedBlock: function(html){
-        $$('.col-right').each(function(d){
+        $$(this.colRightBlock).each(function(d){
             d.insert({
                 top: html
             });
         })
     },
     updateRecentlyComparedBlock: function(html){
-        $$('.block-compared').each(function (d) {
+        $$(this.recentlyComparedBlock).each(function (d) {
             d.update(html);
         });
     },
