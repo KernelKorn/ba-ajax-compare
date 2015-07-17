@@ -1,0 +1,4 @@
+app/code/local/BlueAcorn/AjaxProductCompare/				app/code/local/BlueAcorn/AjaxProductCompare/
+app/design/frontend/base/default/layout/blueacorn/ba_ajaxCompare.xml	app/design/frontend/base/default/layout/blueacorn/ba_ajaxCompare.xml
+app/etc/modules/BlueAcorn_AjaxProductCompare.xml			app/etc/modules/BlueAcorn_AjaxProductCompare.xml
+skin/frontend/base/default/js/blueacorn/ajax_product_compare.js		skin/frontend/base/default/js/blueacorn/ajax_product_compare.js
