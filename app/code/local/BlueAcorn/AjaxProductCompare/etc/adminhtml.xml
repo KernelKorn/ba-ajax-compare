@@ -15,9 +15,9 @@
                         <children>
                             <config>
                                 <children>
-                                    <ajaxproductcompare>
+                                    <blueacorn_ajaxproductcompare>
                                         <title>Blue Acorn Core Tab Settings</title>
-                                    </ajaxproductcompare>
+                                    </blueacorn_ajaxproductcompare>
                                 </children>
                             </config>
                         </children>

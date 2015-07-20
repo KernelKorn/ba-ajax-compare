@@ -8,7 +8,7 @@
 -->
 <config>
     <sections>
-        <ajaxproductcompare translate="label">
+        <blueacorn_ajaxproductcompare translate="label">
             <label>Ajax Product Compare</label>
             <tab>blueacorn</tab>
             <sort_order>1000</sort_order>
@@ -37,6 +37,6 @@
                     </fields>
                 </general>
             </groups>
-        </ajaxproductcompare>
+        </blueacorn_ajaxproductcompare>
     </sections>
 </config>

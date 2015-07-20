@@ -11,9 +11,6 @@
     <catalog_category_view>
         <reference name="head">
             <action method="addItem" ifconfig="ajaxproductcompare/general/select"><type>skin_js</type><name>js/blueacorn/ajax_product_compare.js</name></action>
-            <action method="addItem"><type>js</type><name>prototype/window.js</name><params/></action>
-            <action method="addItem"><type>js_css</type><stylesheet>prototype/windows/themes/default.css</stylesheet></action>
-            <action method="addItem"><type>js_css</type><stylesheet>prototype/windows/themes/alphacube.css</stylesheet></action>
         </reference>
     </catalog_category_view>
 </layout>

@@ -15,17 +15,17 @@
     </modules>
     <global>
         <helpers>
-            <ba_ajaxproductcompare>
+            <blueacorn_ajaxproductcompare>
                 <class>BlueAcorn_AjaxProductCompare_Helper</class>
-            </ba_ajaxproductcompare>
+            </blueacorn_ajaxproductcompare>
         </helpers>
     </global>
     <frontend>
         <layout>
             <updates>
-                <ba_ajaxproductcompare>
+                <blueacorn_ajaxproductcompare>
                     <file>blueacorn/ba_ajaxCompare.xml</file>
-                </ba_ajaxproductcompare>
+                </blueacorn_ajaxproductcompare>
             </updates>
         </layout>
         <routers>
@@ -33,7 +33,7 @@
                 <use>standard</use>
                 <args>
                     <modules>
-                        <ba_ajaxproductcompare before="Mage_Catalog">BlueAcorn_AjaxProductCompare</ba_ajaxproductcompare>
+                        <blueacorn_ajaxproductcompare before="Mage_Catalog">BlueAcorn_AjaxProductCompare</blueacorn_ajaxproductcompare>
                     </modules>
                 </args>
             </catalog>

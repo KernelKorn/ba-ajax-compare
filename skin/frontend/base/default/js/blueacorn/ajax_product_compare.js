@@ -23,6 +23,10 @@ AjaxCompare.prototype = {
             '<ul class="messages"><li class="success-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
         );
 
+        this.errorTemplate = new Template(
+            '<ul class="messages"><li class="error-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
+        );
+
         this.removeOnClickEvents();
         this.setupObservers();
     },
@@ -69,10 +73,16 @@ AjaxCompare.prototype = {
                 }
 
                 self.removeMessage();
-                self.addMessage(message);
+                self.addSuccessMessage(message);
                 self.setupObservers();
                 self.removeOnClickEvents();
                 element.writeAttribute('href', url);
+            },
+            onFailure: function() {
+                var message = {
+                    message: 'Something went wrong'
+                };
+                self.addErrorMessage(message);
             }
         });
     },
@@ -88,11 +98,19 @@ AjaxCompare.prototype = {
             }
         });
     },
-    addMessage: function(message){
+    addSuccessMessage: function(message){
         var self = this;
         $$('.col-main').each(function(d) {
             d.insert({
                 top: self.successTemplate.evaluate(message)
+            });
+        });
+    },
+    addErrorMessage: function(message){
+        var self = this;
+        $$('.col-main').each(function(d) {
+            d.insert({
+                top: self.errorTemplate.evaluate(message)
             });
         });
     },
