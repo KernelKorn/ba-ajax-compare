@@ -4,20 +4,20 @@
  * @author      Blue Acorn, Inc. <code@blueacorn.com>
  * @copyright   Copyright © 2015 Blue Acorn, Inc.
  */
+var ajaxCompare;
 document.observe("dom:loaded", function() {
-    var ajaxCompare = new AjaxCompare();
+    ajaxCompare = new AjaxCompare();
 });
 
 var AjaxCompare = Class.create();
 AjaxCompare.prototype = {
     initialize: function(){
         this.removeBtn = '.sidebar .btn-remove';
-        this.compareBtn = '.sidebar .actions .button';
         this.compareLink = '.link-compare';
-        this.clearAllLink = '.sidebar .actions a';
         this.compareBlock = '.block-compare';
         this.colRightBlock = '.col-right';
         this.recentlyComparedBlock = '.block-compared';
+        this.sidebarActions = this.colRightBlock + ' .actions';
 
         this.successTemplate = new Template(
             '<ul class="messages"><li class="success-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
@@ -33,17 +33,31 @@ AjaxCompare.prototype = {
     setupObservers: function(){
         var self = this;
 
-        $$(self.compareLink, self.removeBtn, self.clearAllLink).invoke('observe', 'click', function(){
+        $$(self.compareLink, self.removeBtn).invoke('observe', 'click', function(){
             self.ajaxRequest(this);
         });
 
-        $$(self.compareBtn).invoke('observe', 'click', function(){
-            self.compareBox(this);
+        $$(self.sidebarActions).each(function(element) {
+            element.select('a').invoke('observe', 'click', function(){
+                self.ajaxRequest(this);
+            })
+            element.select('button').invoke('observe', 'click', function(){
+                self.compareBox(this);
+            })
         });
     },
     removeOnClickEvents: function() {
-        $$(this.removeBtn, this.clearAllLink, this.compareBtn).each(function(element){
+        $$(this.removeBtn).each(function(element){
             element.writeAttribute('onClick', false);
+        });
+
+        $$(this.sidebarActions).each(function(element) {
+            element.select('a').each(function(e){
+                e.writeAttribute('onClick', false);
+            })
+            element.select('button').each(function(e){
+                e.writeAttribute('onClick', false);
+            })
         });
     },
     ajaxRequest: function(element) {

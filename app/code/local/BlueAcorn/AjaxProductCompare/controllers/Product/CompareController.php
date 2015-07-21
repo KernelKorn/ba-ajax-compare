@@ -12,7 +12,7 @@ class BlueAcorn_AjaxProductCompare_Product_CompareController extends Mage_Catalo
 
     public function addAction()
     {
-        if (Mage::helper('ba_ajaxproductcompare')->isEnabled()) {
+        if ($this->_isEnabled()) {
 
             if (!$this->_validateFormKey()) {
                 $this->_redirectReferer();
@@ -45,7 +45,7 @@ class BlueAcorn_AjaxProductCompare_Product_CompareController extends Mage_Catalo
 
     public function removeAction()
     {
-        if (Mage::helper('ba_ajaxproductcompare')->isEnabled()) {
+        if ($this->_isEnabled()) {
             if ($productId = (int)$this->getRequest()->getParam('product')) {
                 $product = Mage::getModel('catalog/product')
                     ->setStoreId(Mage::app()->getStore()->getId())
@@ -83,7 +83,7 @@ class BlueAcorn_AjaxProductCompare_Product_CompareController extends Mage_Catalo
 
     public function clearAction()
     {
-        if (Mage::helper('ba_ajaxproductcompare')->isEnabled()) {
+        if ($this->_isEnabled()) {
             $message = '';
             $items = Mage::getResourceModel('catalog/product_compare_item_collection');
 
@@ -112,12 +112,22 @@ class BlueAcorn_AjaxProductCompare_Product_CompareController extends Mage_Catalo
     }
 
     protected function setResponse($message){
-        $compareHtml = Mage::app()->getLayout()->createBlock('catalog/product_compare_sidebar')->setTemplate('catalog/product/compare/sidebar.phtml')->toHtml();
-        $recentlyComparedHtml = Mage::app()->getLayout()->createBlock('reports/product_compared')->setTemplate('reports/product_compared.phtml')->toHtml();
+        $compareHtml = $this->loadLayout()
+            ->getLayout()
+            ->getBlock('catalog.compare.sidebar')
+            ->toHtml();
+        $recentlyComparedHtml = $this->loadLayout()
+            ->getLayout()
+            ->getBlock('right.reports.product.compared')
+            ->toHtml();
         $response = new Varien_Object();
         $response->setCompareHtml($compareHtml);
         $response->setRecentlyComparedHtml($recentlyComparedHtml);
         $response->setMessage($message);
         Mage::app()->getResponse()->setBody($response->toJson());
+    }
+
+    private function _isEnabled(){
+        return Mage::helper('blueacorn_ajaxproductcompare')->isEnabled();
     }
 }
