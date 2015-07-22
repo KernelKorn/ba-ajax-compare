@@ -17,7 +17,7 @@ AjaxCompare.prototype = {
         this.compareBlock = '.block-compare';
         this.colRightBlock = '.col-right';
         this.recentlyComparedBlock = '.block-compared';
-        this.sidebarActions = this.colRightBlock + ' .actions';
+        this.sidebarActions = '.col-right .actions';
 
         this.successTemplate = new Template(
             '<ul class="messages"><li class="success-msg"><ul><li><span>#{message}</span></li></ul></li></ul>'
